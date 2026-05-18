@@ -1,13 +1,65 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model Company {
+  id        String        @id @default(cuid())
+  name      String
+  country   String        // Country.code (KR, US, DE)
+  industry  String        // manufacturing | logistics | heavy_industry | technology | retail
+  emissions GhgEmission[]
+  products  Product[]
+  posts     Post[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model GhgEmission {
+  id           String   @id @default(cuid())
+  yearMonth    String   // '2024-01'
+  sourceId     String   // EmissionSource.id (lib/data/sources.ts 참조)
+  scope        String   // scope1 | scope2 | scope3
+  activityData Float    // 실제 사용량
+  emissions    Float    // tCO2e
+  companyId    String
+  company      Company  @relation(fields: [companyId], references: [id])
+  createdAt    DateTime @default(now())
+
+  @@index([companyId, yearMonth])
+}
+
+model Product {
+  id             String     @id @default(cuid())
+  name           String
+  functionalUnit String
+  totalEmissions Float      // tCO2e
+  companyId      String
+  company        Company    @relation(fields: [companyId], references: [id])
+  pcf            PcfEntry[]
+  createdAt      DateTime   @default(now())
+}
+
+model PcfEntry {
+  id          String   @id @default(cuid())
+  stage       String   // raw_material | manufacturing | transport | use | end_of_life
+  emissions   Float    // tCO2e
+  description String?
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id])
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String   @db.Text
+  category  String   // announcement | report | news
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id])
+  dateTime  DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

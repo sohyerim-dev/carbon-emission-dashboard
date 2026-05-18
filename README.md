@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 가정 및 설계 결정(Assumptions & Design Decisions)
 
-## Getting Started
+### 기술 스택 선택
 
-First, run the development server:
+| 기술 | 선택 이유 |
+|---|---|
+| Tailwind CSS | 빠른 스타일링, 디자인 시스템 구성 용이 |
+| Zustand | Redux 대비 보일러플레이트 적고 가벼운 전역 상태 관리 |
+| Recharts | React 친화적이고 경량인 차트 라이브러리 |
+| SWR | 로딩/에러/재시도 상태 처리를 일관성 있게 관리 |
+| Prisma + Supabase | 타입 안전한 ORM + 호스팅 PostgreSQL (로컬 설치 없이 사용 가능) |
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 데이터 모델 확장
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+과제의 기본 데이터 모델에서 아래 항목을 추가했습니다.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **`Country.defaultCarbonPrice`** 추가
+   - 이유: 기업의 country 필드가 있는데, 국가마다 탄소 시장 가격이 다름. (K-ETS, EU ETS, CA-CAP). 탄소세 시뮬레이터에서 국가별 기준가를 프리셋으로 제공하기 위해 추가.
+   - 근거: 실제 탄소 회계에서 기업이 속한 규제 시장에 따라 탄소 비용이 결정됨.
+2. **`Company.industry`** 추가
+   - 이유 1 (도메인 이해): 산업군마다 Scope 1/2/3 비중이 다르다는 걸 이해하기 위해 분류가 필요했음. 예를 들어 IT 기업은 Scope 2(전력)가 주를 이루고, 물류 기업은 Scope 1(연료)이 높음. 이를 목 데이터에 반영하려면 산업 분류가 선행되어야 했음.
+   - 이유 2 (기능): 동종업계 벤치마크 비교를 대시보드에서 의미있게 구현하기 위해 추가.
+   - 근거: 실무 탄소 보고서에서 peer benchmarking은 핵심 기능.
+3. **`Post.category`** 추가
+   - 이유: 공시(announcement), 보고서(report), 뉴스(news)를 구분해 필터링 UX 제공. 원본 모델에선 분류 불가.
+   - 근거: 경영진이 공시와 일반 뉴스를 구분해서 볼 필요가 있음.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+### 목 데이터 기업 구성
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+산업별 Scope 프로필이 다른 5개 기업으로 구성했습니다. 같은 탄소 배출량이라도 산업군마다 어디서 배출되는지가 다르기 때문에, 대시보드에서 의미 있는 비교가 가능하도록 다양하게 선택했습니다.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| 기업 | 산업 | 국가 | 주요 Scope |
+|---|---|---|---|
+| Acme Manufacturing | 제조업 | 🇰🇷 한국 | Scope 1, 2 |
+| Globex Logistics | 운송·물류 | 🇺🇸 미국 | Scope 1, 3 |
+| Initech Steel | 중공업 | 🇩🇪 독일 | Scope 1 압도적 |
+| Umbrella Tech | IT·기술 | 🇺🇸 미국 | Scope 2 |
+| Hansung Retail | 소매·유통 | 🇰🇷 한국 | Scope 3 |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 탄소세 시뮬레이터
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 기본 통화 USD, 변환 옵션으로 KRW / EUR 제공
+- 실제 탄소 시장 가격을 프리셋으로 제공해 현실적인 시뮬레이션 가능
+  - K-ETS (한국): ~$8/tCO2e
+  - CA-CAP (캘리포니아): ~$30/tCO2e
+  - EU ETS (유럽): ~$70/tCO2e
+- 시나리오 비교: 현재 유지 vs 감축 목표 vs Net Zero

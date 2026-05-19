@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import type { Company, GhgScope } from "@/types";
+
+type CompanyWithEmissions = Prisma.CompanyGetPayload<{ include: { emissions: true } }>;
 
 export async function GET() {
   try {
@@ -8,7 +11,7 @@ export async function GET() {
       include: { emissions: true },
     });
 
-    const companies: Company[] = rows.map((c) => ({
+    const companies: Company[] = rows.map((c: CompanyWithEmissions) => ({
       id: c.id,
       name: c.name,
       country: c.country,

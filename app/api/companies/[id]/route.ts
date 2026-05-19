@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import type { Company, GhgScope, PcfStage, PostCategory } from "@/types";
+
+type CompanyFull = Prisma.CompanyGetPayload<{
+  include: { emissions: true; products: { include: { pcf: true } }; posts: true };
+}>;
 
 export async function GET(
   _req: Request,
@@ -24,12 +29,13 @@ export async function GET(
       );
     }
 
+    const typed = c as CompanyFull;
     const company: Company & { posts?: unknown[] } = {
-      id: c.id,
-      name: c.name,
-      country: c.country,
-      industry: c.industry as Company["industry"],
-      emissions: c.emissions.map((e) => ({
+      id: typed.id,
+      name: typed.name,
+      country: typed.country,
+      industry: typed.industry as Company["industry"],
+      emissions: typed.emissions.map((e) => ({
         id: e.id,
         yearMonth: e.yearMonth,
         sourceId: e.sourceId,
@@ -37,7 +43,7 @@ export async function GET(
         activityData: e.activityData,
         emissions: e.emissions,
       })),
-      products: c.products.map((p) => ({
+      products: typed.products.map((p) => ({
         id: p.id,
         companyId: p.companyId,
         name: p.name,
@@ -49,7 +55,7 @@ export async function GET(
           description: entry.description ?? undefined,
         })),
       })),
-      posts: c.posts.map((p) => ({
+      posts: typed.posts.map((p) => ({
         id: p.id,
         title: p.title,
         content: p.content,

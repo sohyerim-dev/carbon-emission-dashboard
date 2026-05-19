@@ -12,7 +12,7 @@ function getTitle(pathname: string): string {
     const company = COMPANIES.find((c) => c.id === id);
     return company ? company.name : "기업 상세";
   }
-  return "Carbon Atlas";
+  return "GreenWave Carbon";
 }
 
 export default function Header() {

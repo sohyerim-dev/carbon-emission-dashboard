@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Carbon Atlas",
+  title: "GreenWave Carbon",
   description: "GHG Scope 1/2/3 탄소 배출 대시보드",
 };
 

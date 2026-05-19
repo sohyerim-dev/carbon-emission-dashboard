@@ -43,7 +43,7 @@ export default function Sidebar() {
       >
         {/* 로고 */}
         <div className="px-5 py-5 border-b" style={{ borderColor: "var(--border-subtle)" }}>
-          <span className="text-lg font-bold gradient-text">Carbon Atlas</span>
+          <span className="text-lg font-bold gradient-text">GreenWave Carbon</span>
           <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
             GHG Emission Dashboard
           </p>

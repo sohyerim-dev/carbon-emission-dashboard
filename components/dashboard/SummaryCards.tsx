@@ -1,4 +1,5 @@
 import Card from "@/components/ui/Card";
+import InfoTooltip from "@/components/ui/InfoTooltip";
 
 function fmtEmissions(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(2)}M`;
@@ -38,6 +39,7 @@ export default function SummaryCards({ data }: { data: SummaryData }) {
       label: "총 배출량",
       value: fmtEmissions(totalEmissions),
       unit: "tCO₂e",
+      unitTooltip: "이산화탄소 환산톤 — 온실가스를 CO₂ 기준으로 환산한 단위",
       sub: "선택 기간 전체 합산",
     },
     {
@@ -77,6 +79,9 @@ export default function SummaryCards({ data }: { data: SummaryData }) {
             {card.unit && (
               <span className="text-sm font-normal ml-1" style={{ color: "var(--text-muted)" }}>
                 {card.unit}
+                {"unitTooltip" in card && card.unitTooltip && (
+                  <InfoTooltip text={card.unitTooltip as string} />
+                )}
               </span>
             )}
           </p>

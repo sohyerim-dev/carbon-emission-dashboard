@@ -21,6 +21,7 @@ import SourceDonutChart from "./SourceDonutChart";
 import ReductionRanking from "./ReductionRanking";
 import TaxSimulatorWidget from "./TaxSimulatorWidget";
 import PostsTable from "./PostsTable";
+import ScopeLegend from "@/components/ui/ScopeLegend";
 
 export default function DashboardContent() {
   const { period, scope } = useFilterStore();
@@ -59,9 +60,12 @@ export default function DashboardContent() {
       {/* Scope별 월간 트렌드 */}
       <section>
         <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-          <h2 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
-            월간 배출 추이
-          </h2>
+          <div className="flex flex-wrap items-center gap-4">
+            <h2 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
+              월간 배출 추이
+            </h2>
+            <ScopeLegend />
+          </div>
           <FilterBar />
         </div>
         <ScopeTrendChart

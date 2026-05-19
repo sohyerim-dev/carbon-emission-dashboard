@@ -7,6 +7,7 @@ import { useUiStore, DataStatus } from "@/store/uiStore";
 const NAV_ITEMS = [
   { href: "/",          label: "개요",       icon: "◎" },
   { href: "/companies", label: "기업 분석",  icon: "◈" },
+  { href: "/analysis",  label: "심층 분석",  icon: "◑" },
   { href: "/simulator", label: "탄소세 예측", icon: "◐" },
   { href: "/posts",     label: "공시 관리",  icon: "◫" },
 ];

@@ -305,7 +305,7 @@ export default function SimulatorContent() {
                 width={72}
               />
               <Tooltip
-                formatter={(v: any, name: string) => [
+                formatter={(v, name) => [
                   fmtUsd(Number(v)),
                   name === "currentCost"
                     ? "현재 비용"

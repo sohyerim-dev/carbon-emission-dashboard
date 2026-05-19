@@ -12,7 +12,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-import { Product } from "@/types";
+import { Product, PcfStage } from "@/types";
 import Card from "@/components/ui/Card";
 
 const STAGE_LABELS: Record<string, string> = {
@@ -35,9 +35,11 @@ const STAGE_COLORS: Record<string, string> = {
 };
 
 // Recharts 폭포 차트 = 투명 offset 바 + 실제 값 바 두 겹
-function buildWaterfallData(product: Product) {
+type WaterfallRow = { name: string; stage: PcfStage | "total"; offset: number; value: number; description: string };
+
+function buildWaterfallData(product: Product): WaterfallRow[] {
   let cumulative = 0;
-  const rows = product.pcf.map((entry) => {
+  const rows: WaterfallRow[] = product.pcf.map((entry) => {
     const offset = cumulative;
     cumulative += entry.emissions;
     return {
@@ -48,7 +50,6 @@ function buildWaterfallData(product: Product) {
       description: entry.description ?? "",
     };
   });
-  // 마지막에 합계 바 추가
   rows.push({
     name: "합계",
     stage: "total",

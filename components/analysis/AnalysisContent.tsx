@@ -189,7 +189,7 @@ function CompanyComparison({ companies }: { companies: Company[] }) {
               ))}
               <Legend wrapperStyle={{ fontSize: 11 }} />
               <Tooltip
-                formatter={(v: number) => [`${fmt(v)} tCO₂e`]}
+                formatter={(v) => [`${fmt(Number(v))} tCO₂e`]}
                 contentStyle={TOOLTIP_STYLE}
               />
             </RadarChart>
@@ -285,7 +285,7 @@ function IndustryComparison({ companies }: { companies: Company[] }) {
               tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
             />
             <Tooltip
-              formatter={(v: number, name: string) => [`${fmt(v)} tCO₂e`, name]}
+              formatter={(v, name) => [`${fmt(Number(v))} tCO₂e`, name]}
               contentStyle={TOOLTIP_STYLE}
             />
             <Legend wrapperStyle={{ fontSize: 11 }} />
@@ -418,7 +418,7 @@ function ScopeDetail({ companies }: { companies: Company[] }) {
             />
             <YAxis type="category" dataKey="name" tick={{ fill: "var(--text-secondary)", fontSize: 11 }} width={90} />
             <Tooltip
-              formatter={(v: number) => [`${fmt(v)} tCO₂e`]}
+              formatter={(v) => [`${fmt(Number(v))} tCO₂e`]}
               contentStyle={TOOLTIP_STYLE}
             />
             <Bar
@@ -481,7 +481,7 @@ function PeriodTrend({ companies }: { companies: Company[] }) {
             tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
           />
           <Tooltip
-            formatter={(v: number, name: string) => [`${fmt(v)} tCO₂e`, name]}
+            formatter={(v, name) => [`${fmt(Number(v))} tCO₂e`, name]}
             contentStyle={TOOLTIP_STYLE}
           />
           <Legend wrapperStyle={{ fontSize: 11 }} />
@@ -667,7 +667,7 @@ function YoYAnalysis({ companies }: { companies: Company[] }) {
               tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
             />
             <Tooltip
-              formatter={(v: number, name: string) => [`${fmt(v)} tCO₂e`, `${name}년`]}
+              formatter={(v, name) => [`${fmt(Number(v))} tCO₂e`, `${name}년`]}
               contentStyle={TOOLTIP_STYLE}
             />
             <Legend wrapperStyle={{ fontSize: 11 }} formatter={(v) => `${v}년`} />

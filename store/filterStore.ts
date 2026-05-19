@@ -1,24 +1,22 @@
 import { create } from "zustand";
-import { GhgScope } from "@/types";
-
-type YearRange = "2024" | "2025" | "both";
+import { GhgScope, Period } from "@/types";
 
 interface FilterState {
   scope: GhgScope | "all";
-  yearRange: YearRange;
+  period: Period;
   setScope: (scope: GhgScope | "all") => void;
-  setYearRange: (yearRange: YearRange) => void;
+  setPeriod: (period: Period) => void;
   reset: () => void;
 }
 
 const defaultState = {
   scope: "all" as const,
-  yearRange: "both" as const,
+  period: "all" as Period,
 };
 
 export const useFilterStore = create<FilterState>((set) => ({
   ...defaultState,
   setScope: (scope) => set({ scope }),
-  setYearRange: (yearRange) => set({ yearRange }),
+  setPeriod: (period) => set({ period }),
   reset: () => set(defaultState),
 }));

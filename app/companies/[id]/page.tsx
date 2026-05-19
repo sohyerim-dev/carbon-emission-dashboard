@@ -1,7 +1,11 @@
-export default function CompanyPage({ params }: { params: { id: string } }) {
-  return (
-    <div className="flex items-center justify-center h-64">
-      <p style={{ color: "var(--text-muted)" }}>기업 상세 준비 중 — {params.id}</p>
-    </div>
-  );
+import CompanyContent from "@/components/company/CompanyContent";
+
+export default async function CompanyPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  // Next.js 16: params가 Promise로 바뀜 — await 필수
+  const { id } = await params;
+  return <CompanyContent companyId={id} />;
 }

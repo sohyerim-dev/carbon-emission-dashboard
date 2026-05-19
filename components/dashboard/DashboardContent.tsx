@@ -28,7 +28,7 @@ export default function DashboardContent() {
   const { setDataStatus } = useUiStore();
 
   const { data: companiesRes, isLoading: loadingCompanies, error: companiesErr } = useSWR("companies", fetchCompanies);
-  const { data: postsRes, isLoading: loadingPosts, error: postsErr } = useSWR("posts", fetchPostsFromStore);
+  const { data: postsRes, isLoading: loadingPosts, error: postsErr } = useSWR("posts", () => fetchPostsFromStore());
 
   // 사이드바 데이터 상태 업데이트
   useEffect(() => {

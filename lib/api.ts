@@ -1,6 +1,15 @@
 import type { Company, Post, Product, Country, CarbonMarket, ApiResponse } from "@/types";
 import { COUNTRIES, CARBON_MARKETS } from "@/lib/data";
 
+// 쓰기 작업 실패 시뮬레이션 (15% 확률)
+// 실제 DB를 건드리기 전에 throw → 클라이언트의 에러 처리·롤백 흐름 검증용
+const WRITE_FAILURE_RATE = 0.15;
+function mayFail() {
+  if (Math.random() < WRITE_FAILURE_RATE) {
+    throw new Error("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+  }
+}
+
 // -- 읽기 ----------
 
 export async function fetchCompanies(): Promise<ApiResponse<Company[]>> {
@@ -47,6 +56,7 @@ export async function fetchCarbonMarkets(): Promise<ApiResponse<CarbonMarket[]>>
 export async function createPost(
   post: Omit<Post, "id" | "dateTime">,
 ): Promise<ApiResponse<Post>> {
+  mayFail();
   const res = await fetch("/api/posts", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -59,6 +69,7 @@ export async function updatePost(
   id: string,
   updates: Partial<Omit<Post, "id">>,
 ): Promise<ApiResponse<Post>> {
+  mayFail();
   const res = await fetch(`/api/posts/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -68,6 +79,7 @@ export async function updatePost(
 }
 
 export async function deletePost(id: string): Promise<ApiResponse<null>> {
+  mayFail();
   const res = await fetch(`/api/posts/${id}`, { method: "DELETE" });
   return res.json();
 }

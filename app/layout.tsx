@@ -29,7 +29,7 @@ export default function RootLayout({
       <body className="h-full">
         <Sidebar />
         {/* 사이드바 너비만큼 메인 영역을 오른쪽으로 밀기 (lg 이상에서만) */}
-        <div className="lg:pl-60 min-h-full flex flex-col">
+        <div className="lg:pl-56 min-h-full flex flex-col main-bg">
           <Header />
           <main className="flex-1 p-6">{children}</main>
         </div>

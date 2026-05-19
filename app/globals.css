@@ -59,6 +59,41 @@ body {
   background-origin: border-box;
 }
 
+/* 메인 콘텐츠 배경 이미지 */
+.main-bg {
+  background-image:
+    linear-gradient(135deg, rgba(10, 30, 20, 0.72) 0%, rgba(10, 20, 45, 0.68) 100%),
+    url('/images/bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* 배경 위 색상 전환: 섹션 헤딩은 흰색, 카드는 흰 박스 */
+.main-bg {
+  --bg-card: #ffffff;
+  --bg-surface: #ffffff;
+  --bg-base: rgba(255, 255, 255, 0.04);
+  --border-subtle: rgba(255, 255, 255, 0.18);
+  --border-default: rgba(255, 255, 255, 0.28);
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+}
+
+/* 흰색 카드·헤더 내부: 텍스트를 다크로 리셋 */
+.main-bg [style*="--bg-card"],
+.main-bg header {
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border-subtle: #e2e8f0;
+  --border-default: #cbd5e1;
+  --bg-base: #f1f5f9;
+  --bg-card: #ffffff;
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
 /* 스크롤바 */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg-base); }

@@ -83,7 +83,7 @@ export default function DashboardContent() {
       <TaxSimulatorWidget totalEmissions={summary.totalEmissions} />
 
       {/* 최근 공시 */}
-      <PostsTable posts={posts} companies={companies} />
+      <PostsTable posts={posts} companies={companies} limit={8} />
     </div>
   );
 }

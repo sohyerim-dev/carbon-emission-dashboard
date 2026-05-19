@@ -28,9 +28,10 @@ interface EditingPost {
 interface PostsTableProps {
   posts: Post[];
   companies: Company[];
+  limit?: number; // 기본값 없으면 전체 표시
 }
 
-export default function PostsTable({ posts, companies }: PostsTableProps) {
+export default function PostsTable({ posts, companies, limit }: PostsTableProps) {
   const [localPosts, setLocalPosts] = useState<Post[]>(posts);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [editing, setEditing] = useState<EditingPost | null>(null);
@@ -86,7 +87,7 @@ export default function PostsTable({ posts, companies }: PostsTableProps) {
 
   const rows = [...localPosts]
     .sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime())
-    .slice(0, 8)
+    .slice(0, limit ?? localPosts.length)
     .map((post) => {
       const company = companies.find((c) => c.id === post.resourceUid);
       if (!company) return null;
